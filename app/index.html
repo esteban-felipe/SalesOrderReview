@@ -1,0 +1,175 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="salesOrderReviewApp">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="col-md-12 column">
+          <div class="page-header">
+            <h1>
+              Review sales order
+            </h1>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix bg-info" >
+        <div class="col-md-6 column">
+          <h3>
+            Order
+          </h3>
+          <ul>
+            <li>
+              <strong>Sales rep.:</strong> xxxxx
+            </li>
+            <li>
+              <strong>Order reference:</strong> xxxxx
+            </li>
+            <li>
+              <strong>Order date:</strong> xxxxx
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-6 column">
+          <h3>
+            Client
+          </h3>
+          <ul>
+            <li>
+              <strong>Client id:</strong> xxxxx
+            </li>
+            <li>
+              <strong>Client name:</strong> xxxxx
+            </li>
+            <li>
+              <strong>Contact name:</strong> xxxxx
+            </li>
+            <li>
+              <strong>Contact phone:</strong> xxxxx
+            </li>
+            <li>
+              <strong>Contact email:</strong> xxxxx
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-md-12 column">
+          &nbsp;
+        </div>
+      </div>
+      <div class="row clearfix bg-warning">
+        <div class="col-md-12 column">
+          <h3>
+            Items
+          </h3>
+          <table class="table table-hover table-condensed">
+            <thead>
+              <tr>
+                <th>
+                  Ref.
+                </th>
+                <th>
+                  id
+                </th>
+                <th>
+                  Family
+                </th>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Price
+                </th>
+                <th>
+                  Quantity
+                </th>
+                <th>
+                  Discount
+                </th>
+                <th>
+                  Item price
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  Product
+                </td>
+                <td>
+                  asdadas
+                </td>
+                <td>
+                  $ 123123
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0%
+                </td>
+                <td>
+                  $ 123
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ul>
+            <li>
+              <strong>Global discount:</strong> xxxxx
+            </li>
+            <li>
+              <strong>Total price:</strong> xxxxx
+            </li>
+            <li>
+              <div class="form-group form-inline">
+               <label for="selectDecision">Decision: </label>
+               <select id="selectDecision" class="form-control input-sm">
+                 <option>Approve</option>
+                 <option>Return</option>
+                 <option>Reject</option>
+               </select>
+            </div>  
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
