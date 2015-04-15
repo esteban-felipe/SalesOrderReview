@@ -1,11 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="salesOrderReviewApp">
   <head>
+    <base href="/">
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -16,13 +18,15 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="salesOrderReviewApp">
-    <div class="container">
+  <body ng-controller="taskController">
+    <div class="container" ng-if="data.SalesOrderReview">
       <div class="row clearfix">
         <div class="col-md-12 column">
           <div class="page-header">
             <h1>
-              Review sales order
+              <div class="fa fa-arrow-circle-right fa-6">
+                Review sales order
+              </div>
             </h1>
           </div>
         </div>
@@ -30,39 +34,47 @@
       <div class="row clearfix bg-info" >
         <div class="col-md-6 column">
           <h3>
-            Order
+            <div class="fa fa-cart-arrow-down">&nbsp;&nbsp;<strong>Order</strong></div>
           </h3>
-          <ul>
+          <ul class="fa-ul">
             <li>
-              <strong>Sales rep.:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Sales rep.:</strong> {{data.SalesOrderReview.SalesRepresentative.$}}
             </li>
             <li>
-              <strong>Order reference:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Order reference:</strong> {{data.SalesOrderReview.SalesOrder.OrderRef.$}}
             </li>
             <li>
-              <strong>Order date:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Order date:</strong> {{data.SalesOrderReview.SalesOrder.OrderDate.$ | date : format : mediumDate}}
             </li>
           </ul>
         </div>
         <div class="col-md-6 column">
           <h3>
-            Client
+            <div class="fa fa-user">&nbsp;&nbsp;<strong>Client</strong></div>
           </h3>
-          <ul>
+          <ul class="fa-ul">
             <li>
-              <strong>Client id:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Client id:</strong> {{data.SalesOrderReview.SalesOrder.Client.ClientId.$}}
             </li>
             <li>
-              <strong>Client name:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Client name:</strong> {{data.SalesOrderReview.SalesOrder.Client.ClientName.$}}
             </li>
             <li>
-              <strong>Contact name:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Contact name:</strong> {{data.SalesOrderReview.SalesOrder.Client.ContactName.$}}
             </li>
             <li>
-              <strong>Contact phone:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Contact phone:</strong> {{data.SalesOrderReview.SalesOrder.Client.ContactPhone.$}}
             </li>
             <li>
-              <strong>Contact email:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Contact email:</strong> {{data.SalesOrderReview.SalesOrder.Client.ContactEmail.$}}
             </li>
           </ul>
         </div>
@@ -75,9 +87,9 @@
       <div class="row clearfix bg-warning">
         <div class="col-md-12 column">
           <h3>
-            Items
+            <div class="fa fa-plus-square">&nbsp;&nbsp;<strong>Items</strong></div>
           </h3>
-          <table class="table table-hover table-condensed">
+          <table class="table table-hoverfa">
             <thead>
               <tr>
                 <th>
@@ -107,52 +119,64 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr ng-repeat="item in data.SalesOrderReview.SalesOrder.Items">
                 <td>
-                  1
+                  {{item.ItemRef.$}}
                 </td>
                 <td>
-                  1
+                  {{item.ProductId.$}}
                 </td>
                 <td>
-                  Product
+                  {{item.ProductFamily.$}}
                 </td>
                 <td>
-                  asdadas
+                  {{item.ProductName.$}}
                 </td>
-                <td>
-                  $ 123123
+                <td class="text-right">
+                  {{item.ProductPrice.$ | currency: $: 2}}
                 </td>
-                <td>
-                  1
+                <td class="text-right">
+                  {{item.Quantity.$}}
                 </td>
-                <td>
-                  0%
+                <td class="text-right">
+                  {{item.ItemDiscount.$ | percentage:2}}
                 </td>
-                <td>
-                  $ 123
+                <td class="text-right">
+                  {{item.ItemPrice.$ | currency: $: 2}}
                 </td>
               </tr>
             </tbody>
           </table>
-          <ul>
+
+        </div>
+      </div>
+      <div class="row clearfix bg-warning">
+        <div class="col-md-12 column">
+          <ul class="fa-ul">
             <li>
-              <strong>Global discount:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Global discount:</strong> {{data.SalesOrderReview.SalesOrder.GlobalDiscount.$ |percentage:2}}
             </li>
             <li>
-              <strong>Total price:</strong> xxxxx
+              <i class="fa-li fa fa-square"></i>
+              <strong>Total price:</strong> {{data.SalesOrderReview.SalesOrder.TotalPrice.$ | currency: $: 2}}
             </li>
             <li>
+              <i class="fa-li fa fa-square"></i>
               <div class="form-group form-inline">
-               <label for="selectDecision">Decision: </label>
-               <select id="selectDecision" class="form-control input-sm">
-                 <option>Approve</option>
-                 <option>Return</option>
-                 <option>Reject</option>
-               </select>
-            </div>  
+                <label for="selectDecision">Decision: </label>
+                <select id="selectDecision" ng-model="result" ng-options="opt as opt.label for opt in decisionOptions" class="form-control input-sm" ng-change="decisionChanged(result)"></select>
+              </div>  
+            </li>
+            <li>
+              <button class="btn-primary" ng-click="submit()">Submit</button>
             </li>
           </ul>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-md-12 column">
+          
         </div>
       </div>
     </div>
@@ -168,6 +192,7 @@
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/lib/ng-intalio.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <!-- endbuild -->

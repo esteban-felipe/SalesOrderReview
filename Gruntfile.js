@@ -9,6 +9,7 @@
 
 module.exports = function (grunt) {
 
+  grunt.loadNpmTasks('grunt-connect-proxy');
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
@@ -71,22 +72,23 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
+      proxies: [{
+        context: '/intalio',
+        host: 'bpms.local',
+        port: 8080
+      }],
       livereload: {
         options: {
           open: true,
           middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect().use(
-                '/app/styles',
-                connect.static('./app/styles')
-              ),
-              connect.static(appConfig.app)
-            ];
+            // Setup the proxy
+            var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
+            // Serve static files.
+            middlewares.push(connect.static('.tmp'));
+            middlewares.push(connect().use('/bower_components',connect.static('./bower_components')));
+            middlewares.push(connect().use('/app/styles',connect.static('./app/styles')));
+            middlewares.push(connect.static(appConfig.app));
+            return middlewares;
           }
         }
       },
@@ -94,15 +96,12 @@ module.exports = function (grunt) {
         options: {
           port: 9001,
           middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect.static('test'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect.static(appConfig.app)
-            ];
+            var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
+            middlewares.push(connect.static('.tmp'));
+            middlewares.push(connect.static('test'));
+            middlewares.push(connect().use('/bower_components',connect.static('./bower_components')));
+            middlewares.push(connect.static(appConfig.app));
+            return middlewares;
           }
         }
       },
@@ -399,6 +398,7 @@ module.exports = function (grunt) {
       'clean:server',
       'wiredep',
       'concurrent:server',
+      'configureProxies:server',
       'autoprefixer:server',
       'connect:livereload',
       'watch'
@@ -413,6 +413,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     'wiredep',
+    'configureProxies:server',
     'concurrent:test',
     'autoprefixer',
     'connect:test',
