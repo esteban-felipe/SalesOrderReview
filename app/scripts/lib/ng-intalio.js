@@ -18,7 +18,7 @@ angular.module('ng-intalio').factory('intalioContext', ['$location', function($l
   };
 }]);
 angular.module('ng-intalio').service('intalio',['intalioContext','$q','$http','$window',function(intalioContext,$q,$http,$window){
-  var callService = function(serviceUrl,content,deferred){
+  var callService = function(serviceUrl,content){
     var deferred = $q.defer();
     var req = {
       method: 'POST',
@@ -46,7 +46,7 @@ angular.module('ng-intalio').service('intalio',['intalioContext','$q','$http','$
           participantToken:{'$':intalioContext.token}
         }
       };
-    }
+    };
     var deferred = $q.defer();
     callService('/intalio/ode/processes/TaskManagementServices.TaskManagementServicesSOAP/',getContent()).then(
       function(data){ //Success callback

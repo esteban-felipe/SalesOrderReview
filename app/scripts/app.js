@@ -14,9 +14,14 @@ angular.module('salesOrderReviewApp').controller('taskController', ['$scope','in
   ];
   $scope.result = $scope.decisionOptions[0];
   $scope.submit = function(){
+    $scope.working = true;
     $scope.data.SalesOrderReview.Decision.$=$scope.result.value;
     intalio.completeTask($scope.data).then(function(){
       // 
+    },
+    function(err){
+      $scope.working = false;
+      console.log(err);
     });
   };
   $scope.decisionChanged = function(opt){
@@ -24,6 +29,7 @@ angular.module('salesOrderReviewApp').controller('taskController', ['$scope','in
   };
   intalio.getTask().then(function(d) {
     $scope.data = d;
+    $scope.itemsArray = angular.isArray($scope.data.SalesOrderReview.SalesOrder.Items);
     $scope.data.SalesOrderReview.Decision.$ = $scope.decisionOptions[0];
   });
  

@@ -24,17 +24,18 @@
         <div class="col-md-12 column">
           <div class="page-header">
             <h1>
-              <div class="fa fa-arrow-circle-right fa-6">
+              <div>
+                <i class="fa fa-arrow-circle-right fa-6"></i>
                 Review sales order
               </div>
             </h1>
           </div>
         </div>
       </div>
-      <div class="row clearfix bg-info" >
+      <div class="row clearfix bg-info section" >
         <div class="col-md-6 column">
           <h3>
-            <div class="fa fa-cart-arrow-down">&nbsp;&nbsp;<strong>Order</strong></div>
+            <div><i class="fa fa-cart-arrow-down"></i>&nbsp;&nbsp;<strong>Order</strong></div>
           </h3>
           <ul class="fa-ul">
             <li>
@@ -53,7 +54,7 @@
         </div>
         <div class="col-md-6 column">
           <h3>
-            <div class="fa fa-user">&nbsp;&nbsp;<strong>Client</strong></div>
+            <div><i class="fa fa-user"></i>&nbsp;&nbsp;<strong>Client</strong></div>
           </h3>
           <ul class="fa-ul">
             <li>
@@ -79,17 +80,12 @@
           </ul>
         </div>
       </div>
-      <div class="row clearfix">
-        <div class="col-md-12 column">
-          &nbsp;
-        </div>
-      </div>
-      <div class="row clearfix bg-warning">
+      <div class="row clearfix bg-warning section">
         <div class="col-md-12 column">
           <h3>
-            <div class="fa fa-plus-square">&nbsp;&nbsp;<strong>Items</strong></div>
+            <div><i class="fa fa-plus-square"></i>&nbsp;&nbsp;<strong>Items</strong></div>
           </h3>
-          <table class="table table-hoverfa">
+          <table class="table table-hover">
             <thead>
               <tr>
                 <th>
@@ -119,7 +115,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="item in data.SalesOrderReview.SalesOrder.Items" ng-if="angular.isArray(data.SalesOrderReview.SalesOrder.Items)">
+              <tr ng-repeat="item in data.SalesOrderReview.SalesOrder.Items" ng-if="itemsArray">
                 <td>
                   {{item.ItemRef.$}}
                 </td>
@@ -145,7 +141,7 @@
                   {{item.ItemPrice.$ | currency: $: 2}}
                 </td>
               </tr>
-              <tr ng-if="!angular.isArray(data.SalesOrderReview.SalesOrder.Items)">
+              <tr ng-if="!itemsArray">
                 <td>
                   {{data.SalesOrderReview.SalesOrder.Items.ItemRef.$}}
                 </td>
@@ -173,11 +169,13 @@
               </tr>
             </tbody>
           </table>
-
         </div>
       </div>
-      <div class="row clearfix bg-warning">
+      <div class="row clearfix bg-warning section">
         <div class="col-md-12 column">
+          <h3>
+            <div><i class="fa fa-money"></i>&nbsp;&nbsp;<strong>Items</strong></div>
+          </h3>
           <ul class="fa-ul">
             <li>
               <i class="fa-li fa fa-square"></i>
@@ -195,19 +193,13 @@
               </div>  
             </li>
             <li>
-              <button class="btn-primary" ng-click="submit()">Submit</button>
+              <button class="btn-primary" ng-click="submit()" ng-if="!working">Submit</button>
+              <i class="fa fa-spin fa-spinner fa-4" ng-if="working"></i>
             </li>
           </ul>
         </div>
       </div>
-      <div class="row clearfix">
-        <div class="col-md-12 column">
-          
-        </div>
-      </div>
     </div>
-
-
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
