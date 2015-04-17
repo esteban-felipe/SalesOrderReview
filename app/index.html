@@ -119,7 +119,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="item in data.SalesOrderReview.SalesOrder.Items">
+              <tr ng-repeat="item in data.SalesOrderReview.SalesOrder.Items" ng-if="angular.isArray(data.SalesOrderReview.SalesOrder.Items)">
                 <td>
                   {{item.ItemRef.$}}
                 </td>
@@ -143,6 +143,32 @@
                 </td>
                 <td class="text-right">
                   {{item.ItemPrice.$ | currency: $: 2}}
+                </td>
+              </tr>
+              <tr ng-if="!angular.isArray(data.SalesOrderReview.SalesOrder.Items)">
+                <td>
+                  {{data.SalesOrderReview.SalesOrder.Items.ItemRef.$}}
+                </td>
+                <td>
+                  {{data.SalesOrderReview.SalesOrder.Items.ProductId.$}}
+                </td>
+                <td>
+                  {{data.SalesOrderReview.SalesOrder.Items.ProductFamily.$}}
+                </td>
+                <td>
+                  {{data.SalesOrderReview.SalesOrder.Items.ProductName.$}}
+                </td>
+                <td class="text-right">
+                  {{data.SalesOrderReview.SalesOrder.Items.ProductPrice.$ | currency: $: 2}}
+                </td>
+                <td class="text-right">
+                  {{data.SalesOrderReview.SalesOrder.Items.Quantity.$}}
+                </td>
+                <td class="text-right">
+                  {{data.SalesOrderReview.SalesOrder.Items.ItemDiscount.$ | percentage:2}}
+                </td>
+                <td class="text-right">
+                  {{data.SalesOrderReview.SalesOrder.Items.ItemPrice.$ | currency: $: 2}}
                 </td>
               </tr>
             </tbody>

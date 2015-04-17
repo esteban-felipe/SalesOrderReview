@@ -6,7 +6,7 @@ angular.module('salesOrderReviewApp').filter('percentage', ['$filter', function 
     return $filter('number')(input * 100, decimals) + '%';
   };
 }]);
-angular.module('salesOrderReviewApp').controller('taskController', ['$scope','intalio','$location', function($scope,intalio,$location){
+angular.module('salesOrderReviewApp').controller('taskController', ['$scope','intalio', function($scope,intalio){
   $scope.decisionOptions = [
     {label: 'Approve', value:'Approve'},
     {label: 'Return', value:'Return'},
@@ -16,7 +16,7 @@ angular.module('salesOrderReviewApp').controller('taskController', ['$scope','in
   $scope.submit = function(){
     $scope.data.SalesOrderReview.Decision.$=$scope.result.value;
     intalio.completeTask($scope.data).then(function(){
-      $location.url('/intalio/index.htm#/workflow/tasks');
+      // 
     });
   };
   $scope.decisionChanged = function(opt){

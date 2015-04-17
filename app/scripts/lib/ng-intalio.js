@@ -5,6 +5,8 @@ angular.module('ng-intalio').config( ['$locationProvider', function( $locationPr
   $locationProvider.html5Mode(true) ;
 }]);
 angular.module('ng-intalio').factory('intalioContext', ['$location', function($location){
+  // console.log($location.search().token); 
+  // console.log($location.absUrl()); 
   return {
     url : $location.absUrl(),
     taskid : $location.search().id,
@@ -15,19 +17,12 @@ angular.module('ng-intalio').factory('intalioContext', ['$location', function($l
     claimTaskOnOpen : $location.search().claimTaskOnOpen
   };
 }]);
-angular.module('ng-intalio').service('intalio',['intalioContext','$q','$http',function(intalioContext,$q,$http){
-  this.getTask = function(){
+angular.module('ng-intalio').service('intalio',['intalioContext','$q','$http','$window',function(intalioContext,$q,$http,$window){
+  var callService = function(serviceUrl,content,deferred){
     var deferred = $q.defer();
-    var content = {
-      getTaskRequest:{
-        '@xmlns':{'$':'http:\/\/www.intalio.com\/BPMS\/Workflow\/TaskManagementServices-20051109\/'},
-        taskId:{'$':intalioContext.taskid},
-        participantToken:{'$':intalioContext.token}
-      }
-    };
     var req = {
       method: 'POST',
-      url: '/intalio/ode/processes/TaskManagementServices.TaskManagementServicesSOAP/',
+      url: serviceUrl,
       data: content,
       headers: {
         'Content-Type':'application/json/badgerfish'
@@ -35,11 +30,48 @@ angular.module('ng-intalio').service('intalio',['intalioContext','$q','$http',fu
     };
     $http(req).
       success(function(data){
-        deferred.resolve(data['tms:getTaskResponse']['tms:task']['tms:input']);
+        deferred.resolve(data);
       }).
       error(function(data,status,headers,config){
         deferred.reject({data:data,status:status,headers:headers,config:config});
       });
+    return deferred.promise;
+  };
+  this.getTask = function(){
+    var getContent = function(){
+      return {
+        getTaskRequest:{
+          '@xmlns':{'$':'http:\/\/www.intalio.com\/BPMS\/Workflow\/TaskManagementServices-20051109\/'},
+          taskId:{'$':intalioContext.taskid},
+          participantToken:{'$':intalioContext.token}
+        }
+      };
+    }
+    var deferred = $q.defer();
+    callService('/intalio/ode/processes/TaskManagementServices.TaskManagementServicesSOAP/',getContent()).then(
+      function(data){ //Success callback
+        deferred.resolve(data['tms:getTaskResponse']['tms:task']['tms:input']);
+      },
+      function(err){ //Failure callback
+        /*
+          This is a horrible hack due the fact that we are not recieving the data in the query string url encoded
+        */
+        if(err.data && err.data.Fault && err.data.Fault.$.indexOf('invalidParticipantTokenFault') > -1){
+          intalioContext.token = intalioContext.token + '=';
+          callService('/intalio/ode/processes/TaskManagementServices.TaskManagementServicesSOAP/',getContent()).then(
+            function(data){ //Success callback
+              deferred.resolve(data['tms:getTaskResponse']['tms:task']['tms:input']);
+            },
+            function(err){ //Failure callback
+              deferred.reject(err);
+            }
+          );
+        }
+        else{
+          deferred.reject(err);
+        }
+      }
+    );
     return deferred.promise;
   };
   this.completeTask = function(output){
@@ -55,21 +87,14 @@ angular.module('ng-intalio').service('intalio',['intalioContext','$q','$http',fu
         taskOutput:output
       }
     };
-    var req = {
-      method: 'POST',
-      url: '/intalio/ode/processes/completeTask',
-      data: content,
-      headers: {
-        'Content-Type':'application/json/badgerfish'
-      }
-    };
-    $http(req).
-      success(function(data){
+    callService('/intalio/ode/processes/completeTask',content).then(
+      function(data){
+        $window.location.assign('empty.html');
         deferred.resolve(data);
-      }).
-      error(function(data,status,headers,config){
-        deferred.reject({data:data,status:status,headers:headers,config:config});
-      });   
+      },
+      function(err){
+        deferred.reject(err);
+      });
     return deferred.promise;
   };
 }]); 
